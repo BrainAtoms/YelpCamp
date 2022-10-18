@@ -1,3 +1,4 @@
+
 const mongoose = require('mongoose');
 const cities = require('./cities');
 const { places, descriptors } = require('./seedHelpers');
@@ -20,20 +21,37 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
     await Campground.deleteMany({});
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 300; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random() * 20) + 10;
         const camp = new Campground({
-            author: '62fa8f0f6067ef613bf378b2',
+            //YOUR USER ID
+            author: '62fa959f36e347bc66d06edf',
             location: `${cities[random1000].city}, ${cities[random1000].state}`,
             title: `${sample(descriptors)} ${sample(places)}`,
-            image: 'http://source.unsplash.com/collection/483251',
-            description: 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ratione, tenetur veniam eius hic fugit harum enim deserunt! Delectus amet iste ad ratione vel ut voluptatibus. Accusantium laudantium asperiores quisquam fuga.',
-            price
+            description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
+            price,
+            geometry: {
+                type: "Point",
+                coordinates: [
+                    cities[random1000].longitude,
+                    cities[random1000].latitude,
+                ]
+            },
+            images: [
+                {
+                  url: 'https://res.cloudinary.com/djtom8ujo/image/upload/v1662842540/YelpCamp/ngiin0c0mf21jxgwtrwi.jpg',
+                  filename: 'YelpCamp/ngiin0c0mf21jxgwtrwi',
+                },
+                {
+                  url: 'https://res.cloudinary.com/djtom8ujo/image/upload/v1662842540/YelpCamp/osvh7ksxvlmy8yxdgzjx.jpg',
+                  filename: 'YelpCamp/osvh7ksxvlmy8yxdgzjx',
+                }
+              ]
         })
-        await camp.save();   
+        await camp.save();
     }
-} 
+}
 
 seedDB().then(() => {
     mongoose.connection.close();
